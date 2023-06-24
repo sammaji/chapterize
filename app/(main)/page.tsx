@@ -165,7 +165,7 @@ export default function PageMain() {
 					"my-4 flex items-center justify-center"
 				)}
 			>
-				<div className="smooth-shadow p-1 bg-white w-[92%] max-w-[600px] border-[1px] border-[rgba(0,0,0,0.12)] rounded-xl">
+				<div className="p-1 bg-white w-[92%] max-w-[600px] border-[1px] border-[rgba(0,0,0,0.12)] rounded-xl">
 					<SegmentedControl
 						// maw={"600px"}
 						w="100%"
@@ -187,29 +187,17 @@ export default function PageMain() {
 			<div
 				className={cn(
 					!urlInputContent ? "hidden" : "",
-					"relative my-4 mx-auto p-8 grid grid-rows-[auto_1fr] gap-4 items-center justify-items-start bg-white border-[1px] border-[rgba(0,0,0,0.12)] max-w-[600px] w-[92%] rounded-xl"
+					"relative my-4 mx-auto pt-4 pb-8 px-8 grid grid-rows-[auto_1fr] gap-2 items-center justify-items-start bg-white border-[1px] border-[rgba(0,0,0,0.12)] max-w-[600px] w-[92%] rounded-xl h-fit"
 				)}
 			>
-				<BsClipboard2
-					color="black"
-					size={36}
-					onClick={() => {
-						clipboard.copy(timestampInfo);
-					}}
-					className={cn(
-						clipboard.copied ? "hidden" : "",
-						"absolute rounded-lg p-2 ml-auto top-[8px] right-[8px]"
-					)}
-				/>
-				<BsClipboard2Check
-					color="black"
-					size={36}
-					className={cn(
-						!clipboard.copied ? "hidden" : "",
-						"absolute rounded-lg p-2 ml-auto top-[8px] right-[8px]"
-					)}
-				/>
-				<TypographyP className="whitespace-pre-wrap">{timestampInfo}</TypographyP>
+				<div className="w-[100%] h-[42px] flex items-center justify-end">
+					{!clipboard.copied ? <button className="h-[100%] text-black flex items-center justify-center gap-1 px-4 py-2 rounded-xl hover:text-white hover:bg-black" onClick={() => clipboard.copy(timestampInfo)}>
+						<BsClipboard2 size={18}/>Copy</button>: <button className="h-[100%] text-black flex items-center justify-center gap-1 p-2">
+						<BsClipboard2Check size={18}/>Copied!</button>}
+				</div>
+				<TypographyP className="whitespace-pre-wrap">
+					{timestampInfo}
+				</TypographyP>
 			</div>
 
 			<div className="flex flex-col items-center justify-center mt-4 mb-24 gap-8">
