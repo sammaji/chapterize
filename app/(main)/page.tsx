@@ -191,9 +191,20 @@ export default function PageMain() {
 				)}
 			>
 				<div className="w-[100%] h-[42px] flex items-center justify-end">
-					{!clipboard.copied ? <button className="h-[100%] text-black flex items-center justify-center gap-1 px-4 py-2 rounded-xl hover:text-white hover:bg-black" onClick={() => clipboard.copy(timestampInfo)}>
-						<BsClipboard2 size={18}/>Copy</button>: <button className="h-[100%] text-black flex items-center justify-center gap-1 p-2">
-						<BsClipboard2Check size={18}/>Copied!</button>}
+					{!clipboard.copied ? (
+						<button
+							className="h-[100%] text-black flex items-center justify-center gap-1 px-4 py-2 rounded-xl hover:text-white hover:bg-black"
+							onClick={() => clipboard.copy(timestampInfo)}
+						>
+							<BsClipboard2 size={18} />
+							Copy
+						</button>
+					) : (
+						<button className="h-[100%] text-black flex items-center justify-center gap-1 p-2">
+							<BsClipboard2Check size={18} />
+							Copied!
+						</button>
+					)}
 				</div>
 				<TypographyP className="whitespace-pre-wrap">
 					{timestampInfo}
