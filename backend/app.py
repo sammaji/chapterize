@@ -7,6 +7,7 @@ app = FastAPI()
 
 origins = [
     "http://localhost:3000",
+    "https://aitstamp.vercel.app"
 ]
 
 app.add_middleware(
@@ -21,7 +22,7 @@ app.add_middleware(
 def parse_transcript(transcript_item):
     start = round(transcript_item['start'], 2)
     end = round(transcript_item['start'] + transcript_item['duration'], 2)
-    parsed_transcript = f"{start}:{end}={transcript_item['text']}\n"
+    parsed_transcript = f"{start} - {end}={transcript_item['text']}\n"
     return {'count': len(parsed_transcript), 'content': parsed_transcript}
 
 
@@ -78,7 +79,7 @@ def generate_timestamp(transcript_chunk: str, model: str, qty: str):
          "content": "You are a helpful model that generates timestamps from YouTube "
                     "captions. Each timestamp must me short and accurate. You must follow the given "
                     f"format strictly.\n"
-                    "Format of Transcript: {startTime}:{endTime}={transcript text}\n"
+                    "Format of Transcript: {startTime} - {endTime}={transcript text}\n"
                     "Format Of Timestamp: {startTime}={oneline short description}\n\n"
                     "---\n"
                     f"{quantity[qty]}"},
