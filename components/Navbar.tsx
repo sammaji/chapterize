@@ -1,9 +1,10 @@
 import { useLicenseInfo } from "@/firebase/LicenseProvider";
 import { useAuth } from "../firebase/AuthProvider";
+import { BiCheck } from "react-icons/bi";
 
 export default function Navbar() {
 	const { user, authenticate, signout } = useAuth();
-	const { isSubscriptionActive, isSubscriptionCancelled } = useLicenseInfo()
+	const { isSubscriptionActive, isSubscriptionCancelled } = useLicenseInfo();
 
 	const handleAuth = () => {
 		authenticate();
@@ -35,8 +36,7 @@ export default function Navbar() {
 
 	return (
 		<div className="h-[56px] w-[100%] flex items-center justify-end px-8 gap-2">
-			<h2 className="text-black">{isSubscriptionActive ? "true": "false"}</h2>
-			<h2>{isSubscriptionCancelled ? "true": "false"}</h2>
+			<h2 className="text-black flex items-center justify-center gap-1">{isSubscriptionActive ? <><BiCheck />{"Pro"}</> : ""}</h2>
 			{!user ? (
 				<button
 					className="bg-black text-white h-[36px] px-4 text-sm rounded-xl"

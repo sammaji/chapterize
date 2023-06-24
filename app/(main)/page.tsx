@@ -88,11 +88,20 @@ export default function PageMain() {
 		}
 		const timestampApiUrl = `${
 			process.env.NEXT_PUBLIC_TIMESTAMP_API_URL as string
-		}/${vid}?key=${process.env.NEXT_PULIC_OPEN_AI_API_KEY}&qty=${
+		}/${vid}?key=${process.env.NEXT_PUBLIC_OPEN_AI_API_KEY}&qty=${
 			values.qty
 		}&model=gpt-3.5-turbo`;
 
-		fetch(timestampApiUrl, { method: "GET", keepalive: true })
+		fetch(timestampApiUrl, {
+			method: "GET",
+			keepalive: true,
+			headers: {
+				"Access-Control-Allow-Origin": "*",
+				"Access-Control-Allow-Credentials": "true",
+				"Access-Control-Allow-Headers": "*",
+				"Access-Control-Allow-Methods": "*"
+			},
+		})
 			.then((response) => {
 				if (response.ok) {
 					return response.json();

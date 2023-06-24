@@ -6,15 +6,17 @@ from youtube_transcript_api import YouTubeTranscriptApi
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",
-    "https://aitstamp.vercel.app"
+    "*"
+    # "http://localhost",
+    # "http://localhost:3000",
+    # "https://aitstamp.vercel.app"
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -70,9 +72,9 @@ def get_timestamps_message():
 
 def generate_timestamp(transcript_chunk: str, model: str, qty: str):
     quantity = {
-        "few": "Generate 1 timestamp only",
-        "normal": "Generate 2 timestamps only",
-        "many": "Generate 3 timestamps only"
+        "few": "Generate 2 timestamp",
+        "normal": "Generate 3 timestamps",
+        "many": "Generate 5 timestamps"
     }
     messages = [
         {"role": "system",
