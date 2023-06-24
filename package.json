@@ -9,6 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "frontend:deploy": "vercel . -e NODE_ENV=production",
     "backend:deploy": "vercel ./backend -e NODE_ENV=production"
   },
   "dependencies": {
