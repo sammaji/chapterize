@@ -20,10 +20,9 @@ import IcTikTok from "@/assets/icons/ic_tiktok.svg";
 import IcYouTube from "@/assets/icons/ic_youtube.svg";
 import IcInstagram from "@/assets/icons/ic_instagram.svg";
 
-import AuthProvider, { useAuth } from "@/firebase/AuthProvider";
+import { useAuth } from "@/firebase/AuthProvider";
 import Navbar from "@/components/Navbar";
-import LicenseProvider, { useLicenseInfo } from "@/firebase/LicenseProvider";
-import { User } from "firebase/auth";
+import { useLicenseInfo } from "@/firebase/LicenseProvider";
 
 // let timerId: NodeJS.Timeout;
 // async function queuedFetch(
@@ -63,7 +62,6 @@ export default function PageMain() {
 			setIsGenerating(false);
 		}, 5000);
 
-		console.log(values);
 		if (!user) {
 			alert("Please login or signup to continue...");
 			setIsGenerating(false);
@@ -90,7 +88,9 @@ export default function PageMain() {
 		}
 		const timestampApiUrl = `${
 			process.env.NEXT_PUBLIC_TIMESTAMP_API_URL as string
-		}/${vid}?key=${process.env.NEXT_PULIC_OPEN_AI_API_KEY}&model=gpt-3.5-turbo`;
+		}/${vid}?key=${process.env.NEXT_PULIC_OPEN_AI_API_KEY}&qty=${
+			values.qty
+		}&model=gpt-3.5-turbo`;
 
 		fetch(timestampApiUrl, { method: "GET", keepalive: true })
 			.then((response) => {
@@ -167,7 +167,6 @@ export default function PageMain() {
 			>
 				<div className="p-1 bg-white w-[92%] max-w-[600px] border-[1px] border-[rgba(0,0,0,0.12)] rounded-xl">
 					<SegmentedControl
-						// maw={"600px"}
 						w="100%"
 						h={"100%"}
 						radius="md"
