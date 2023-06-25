@@ -23,6 +23,7 @@ import IcInstagram from "@/assets/icons/ic_instagram.svg";
 import { useAuth } from "@/firebase/AuthProvider";
 import Navbar from "@/components/Navbar";
 import { useLicenseInfo } from "@/firebase/LicenseProvider";
+import { generateTimestamps, getTimestamps } from "@/lib/openai";
 
 // let timerId: NodeJS.Timeout;
 // async function queuedFetch(
@@ -68,11 +69,11 @@ export default function PageMain() {
 			return;
 		}
 
-		if (!isSubscriptionActive || isSubscriptionCancelled) {
-			alert("Please activate your subscription to continue");
-			setIsGenerating(false);
-			return;
-		}
+		// if (!isSubscriptionActive || isSubscriptionCancelled) {
+		// 	alert("Please activate your subscription to continue");
+		// 	setIsGenerating(false);
+		// 	return;
+		// }
 
 		if (!validateYtUrl(values.yt_url)) {
 			alert("Invalid URL");
@@ -86,34 +87,45 @@ export default function PageMain() {
 			setIsGenerating(false);
 			return;
 		}
-		const timestampApiUrl = `${
-			process.env.NEXT_PUBLIC_TIMESTAMP_API_URL as string
-		}/${vid}?key=${process.env.NEXT_PUBLIC_OPEN_AI_API_KEY}&qty=${
-			values.qty
-		}&model=gpt-3.5-turbo`;
+		// const timestampApiUrl = `${
+		// 	process.env.NEXT_PUBLIC_TIMESTAMP_API_URL as string
+		// }/${vid}?key=${process.env.NEXT_PUBLIC_OPEN_AI_API_KEY}&qty=${
+		// 	values.qty
+		// }&model=gpt-3.5-turbo`;
+		// const transcriptApiUrl = `${process.env.NEXT_PUBLIC_TRANSCRIPT_API_URL}/${vid}`;
 
-		fetch(timestampApiUrl, {
-			method: "GET",
-			keepalive: true,
-			headers: {
-				"Access-Control-Allow-Origin": "*",
-				"Access-Control-Allow-Credentials": "true",
-				"Access-Control-Allow-Headers": "*",
-				"Access-Control-Allow-Methods": "*"
-			},
-		})
-			.then((response) => {
-				if (response.ok) {
-					return response.json();
-				}
-			})
-			.then((data) => {
-				setTimestampInfo(
-					timestampArrayToString(parseRawTimestamp(data.content))
-				);
-				setIsGenerating(false);
-				console.log(data.content);
-			});
+		generateTimestamps(vid, values.qty).then((data) => {
+			console.log(data);
+			setTimestampInfo(timestampArrayToString(parseRawTimestamp(data)));
+		});
+
+		// fetch(transcriptApiUrl, {
+		// 	method: "POST",
+		// 	keepalive: true,
+		// });
+
+		// fetch(timestampApiUrl, {
+		// 	method: "GET",
+		// 	keepalive: true,
+		// 	headers: {
+		// 		"Access-Control-Allow-Origin": "*",
+		// 		"Access-Control-Allow-Credentials": "true",
+		// 		"Access-Control-Allow-Headers": "*",
+		// 		"Access-Control-Allow-Methods": "*",
+		// 	},
+		// })
+		// 	.then((response) => {
+		// 		if (response.ok) {
+		// 			return response.json();
+		// 		}
+		// 	})
+		// 	.then((data) => {
+		// 		setTimestampInfo(
+		// 			timestampArrayToString(parseRawTimestamp(data.content))
+		// 		);
+		// 		setIsGenerating(false);
+		// 		console.log(data.content);
+		// 	});
 	}
 
 	return (

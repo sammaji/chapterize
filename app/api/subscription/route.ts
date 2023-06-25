@@ -2,7 +2,7 @@ import { headers } from "next/dist/client/components/headers";
 import { NextResponse } from "next/server";
 import getRawBody from "raw-body";
 import { Readable } from "stream";
-import crypto, { sign } from "crypto";
+import crypto from "crypto";
 import { createOrUpdateLicense, updateLicense } from "@/firebase/firestore";
 
 export async function POST(request: Request) {
@@ -28,20 +28,24 @@ export async function POST(request: Request) {
         return NextResponse.json({ message: "No User ID Found" }, { status: 403 })
     }
 
-    switch(payload.meta.event_name) {
-        case "subscription_created":
-            createOrUpdateLicense(uid, {
-                subscriptionId: payload.data.id,
-                customerId: payload.data.attributes.customer_id,
-                variantId: payload.data.attributes.variant_id,
-                currentPeriodEnd: payload.data.attributes.renews_at
-            })
-            return NextResponse.json({message: "Success"}, {status: 200})
-        case "subscription_updated":
-            updateLicense(uid, {
-                variantId: payload.data.attributes.variant_id,
-                currentPeriodEnd: payload.data.attributes.renews_at 
-            })
-            return NextResponse.json({message: "Success"}, {status: 200})
+    try {
+        switch(payload.meta.event_name) {
+            case "subscription_created":
+                await createOrUpdateLicense(uid, {
+                    subscriptionId: payload.data.id,
+                    customerId: payload.data.attributes.customer_id,
+                    variantId: payload.data.attributes.variant_id,
+                    currentPeriodEnd: payload.data.attributes.renews_at
+                })
+                return NextResponse.json({message: "Success"}, {status: 200})
+            case "subscription_updated":
+                await updateLicense(uid, {
+                    variantId: payload.data.attributes.variant_id,
+                    currentPeriodEnd: payload.data.attributes.renews_at 
+                })
+                return NextResponse.json({message: "Success"}, {status: 200})
+        }
+    } catch (error: any) {
+        return NextResponse.json({message: error.message || "Some Unknown Error occurred", body: error}, {status: 200})
     }
 }
