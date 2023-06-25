@@ -59,9 +59,9 @@ export default function PageMain() {
 
 	function handleSubmit(values: any) {
 		setIsGenerating(true);
-		setTimeout(() => {
-			setIsGenerating(false);
-		}, 5000);
+		// setTimeout(() => {
+		// 	setIsGenerating(false);
+		// }, 5000);
 
 		if (!user) {
 			alert("Please login or signup to continue...");
