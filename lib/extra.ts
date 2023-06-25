@@ -31,11 +31,15 @@ export function formatSecondsToTimeString(seconds: number): string {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = Math.floor(seconds % 60);
+
+    if (Number.isNaN(hours) || Number.isNaN(minutes) || Number.isNaN(seconds)) {
+      throw new Error(`Timestamp is NaN`)
+    }
   
     const formattedHours = hours.toString().padStart(2, '0');
     const formattedMinutes = minutes.toString().padStart(2, '0');
     const formattedSeconds = remainingSeconds.toString().padStart(2, '0');
-  
+
     return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
   }
 
@@ -43,22 +47,31 @@ export function parseRawTimestamp(timestamp: string[]) {
     let result: string[] = []
 
     for (let i=0; i<timestamp.length; i++) {
-        let element = timestamp[i].trim().split("\n")
+        let element = timestamp[i]?.trim()?.split("\n")
         
         for (let j=0; j<element.length; j++) {
             let parts = element[j].split("=")
             const time = parts[0].split("-")[0]
 
-            result.push(`${formatSecondsToTimeString(Number(time))} ${parts[1]}`)
+            try {
+              const timestring = formatSecondsToTimeString(Number(time))
+              result.push(`${timestring} ${parts[1]}`)
+            }
+            catch (error: any) {}
+
+            console.log(result.length)
         }
     }
-
+    console.log(result)
     return result;
 }
 
 
 export function timestampArrayToString(timestamp: string[]) {
+
+  if (timestamp.length === 0) return ""
+
   return timestamp.reduce((acc, curr) => {
     return `${acc}\n${curr}`
-  })
+  }, "")
 }

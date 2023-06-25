@@ -24,7 +24,7 @@ app.add_middleware(
 def parse_transcript(transcript_item):
     start = round(transcript_item['start'], 2)
     end = round(transcript_item['start'] + transcript_item['duration'], 2)
-    parsed_transcript = f"{start} - {end}={transcript_item['text']}\n"
+    parsed_transcript = f"{start}-{end}={transcript_item['text']}\n"
     return {'count': len(parsed_transcript), 'content': parsed_transcript}
 
 
@@ -65,7 +65,7 @@ def get_transcripts(vid: str, fmt: str = "string"):
         return {'vid': vid, 'count': len(transcript_chunk), 'transcript': transcript_chunk}
 
 
-@app.get("/api/tstamp")
+# @app.get("/api/tstamp")
 def get_timestamps_message():
     return {"module": "timestamps", "status": "live"}
 
@@ -81,7 +81,7 @@ def generate_timestamp(transcript_chunk: str, model: str, qty: str):
          "content": "You are a helpful model that generates timestamps from YouTube "
                     "captions. Each timestamp must me short and accurate. You must follow the given "
                     f"format strictly.\n"
-                    "Format of Transcript: {startTime} - {endTime}={transcript text}\n"
+                    "Format of Transcript: {startTime}-{endTime}={transcript text}\n"
                     "Format Of Timestamp: {startTime}={oneline short description}\n\n"
                     "---\n"
                     f"{quantity[qty]}"},
@@ -92,7 +92,7 @@ def generate_timestamp(transcript_chunk: str, model: str, qty: str):
     return response
 
 
-@app.get("/api/tstamp/{vid}")
+# @app.get("/api/tstamp/{vid}")
 def get_timestamps(vid: str, key: str, model: str = "gpt-3.5-turbo", qty: str = "normal"):
     if key is None:
         raise HTTPException(status_code=401, detail="Please provide a valid API key")
