@@ -4,6 +4,7 @@ import { useState } from "react";
 import { TypographyP, TypographySmall } from "@/components/Typography";
 import { BsClipboard2, BsClipboard2Check } from "react-icons/bs";
 import { SegmentedControl, Title } from "@mantine/core";
+import { ImSpinner2 } from "react-icons/im";
 import { BiLoaderAlt } from "react-icons/bi";
 import {
 	cn,
@@ -24,6 +25,7 @@ import { useAuth } from "@/firebase/AuthProvider";
 import Navbar from "@/components/Navbar";
 import { useLicenseInfo } from "@/firebase/LicenseProvider";
 import { generateTimestamps, getTimestamps } from "@/lib/openai";
+import useFragmentedState from "@/lib/useFragmentedState";
 
 // let timerId: NodeJS.Timeout;
 // async function queuedFetch(
@@ -44,11 +46,16 @@ import { generateTimestamps, getTimestamps } from "@/lib/openai";
 export default function PageMain() {
 	const { user } = useAuth();
 	const { isSubscriptionActive, isSubscriptionCancelled } = useLicenseInfo();
+	const {
+		timestampString,
+		dispatch,
+		isLoadingTimestamp,
+		setIsLoadingTimestamp,
+	} = useFragmentedState();
 
 	const clipboard = useClipboard();
 	const [urlInputContent, setUrlInputContent] = useState<string>("");
 	const [timestampInfo, setTimestampInfo] = useState<string>("Loading...");
-	const [isGenerating, setIsGenerating] = useState<boolean>(false);
 
 	const form = useForm({
 		initialValues: {
@@ -58,14 +65,11 @@ export default function PageMain() {
 	});
 
 	function handleSubmit(values: any) {
-		setIsGenerating(true);
-		// setTimeout(() => {
-		// 	setIsGenerating(false);
-		// }, 5000);
+		setIsLoadingTimestamp(true);
 
 		if (!user) {
 			alert("Please login or signup to continue...");
-			setIsGenerating(false);
+			setIsLoadingTimestamp(false);
 			return;
 		}
 
@@ -77,55 +81,20 @@ export default function PageMain() {
 
 		if (!validateYtUrl(values.yt_url)) {
 			alert("Invalid URL");
-			setIsGenerating(false);
+			setIsLoadingTimestamp(false);
 			return;
 		}
 
 		const vid = extractVideoId(values.yt_url);
 		if (!vid) {
 			alert("Invalid URL");
-			setIsGenerating(false);
+			setIsLoadingTimestamp(false);
 			return;
 		}
-		// const timestampApiUrl = `${
-		// 	process.env.NEXT_PUBLIC_TIMESTAMP_API_URL as string
-		// }/${vid}?key=${process.env.NEXT_PUBLIC_OPEN_AI_API_KEY}&qty=${
-		// 	values.qty
-		// }&model=gpt-3.5-turbo`;
-		// const transcriptApiUrl = `${process.env.NEXT_PUBLIC_TRANSCRIPT_API_URL}/${vid}`;
 
-		generateTimestamps(vid, values.qty).then((data) => {
-			console.log(data);
-			setTimestampInfo(timestampArrayToString(parseRawTimestamp(data)));
+		dispatch(vid, values.qty).then(() => {
+			setIsLoadingTimestamp(false);
 		});
-
-		// fetch(transcriptApiUrl, {
-		// 	method: "POST",
-		// 	keepalive: true,
-		// });
-
-		// fetch(timestampApiUrl, {
-		// 	method: "GET",
-		// 	keepalive: true,
-		// 	headers: {
-		// 		"Access-Control-Allow-Origin": "*",
-		// 		"Access-Control-Allow-Credentials": "true",
-		// 		"Access-Control-Allow-Headers": "*",
-		// 		"Access-Control-Allow-Methods": "*",
-		// 	},
-		// })
-		// 	.then((response) => {
-		// 		if (response.ok) {
-		// 			return response.json();
-		// 		}
-		// 	})
-		// 	.then((data) => {
-		// 		setTimestampInfo(
-		// 			timestampArrayToString(parseRawTimestamp(data.content))
-		// 		);
-		// 		setIsGenerating(false);
-		// 		console.log(data.content);
-		// 	});
 	}
 
 	return (
@@ -166,11 +135,14 @@ export default function PageMain() {
 						<BiLoaderAlt
 							color="white"
 							size={24}
-							className={cn(!isGenerating ? "hidden" : "", "animate-spin")}
+							className={cn(
+								!isLoadingTimestamp ? "hidden" : "",
+								"animate-spin"
+							)}
 						/>
 						<p
 							className={cn(
-								isGenerating ? "hidden" : "",
+								isLoadingTimestamp ? "hidden" : "",
 								"font-semibold text-white"
 							)}
 						>
@@ -211,23 +183,35 @@ export default function PageMain() {
 				)}
 			>
 				<div className="w-[100%] h-[42px] flex items-center justify-end">
-					{!clipboard.copied ? (
-						<button
-							className="h-[100%] text-black flex items-center justify-center gap-1 px-4 py-2 rounded-xl hover:text-white hover:bg-black"
-							onClick={() => clipboard.copy(timestampInfo)}
-						>
-							<BsClipboard2 size={18} />
-							Copy
-						</button>
-					) : (
-						<button className="h-[100%] text-black flex items-center justify-center gap-1 p-2">
-							<BsClipboard2Check size={18} />
-							Copied!
-						</button>
-					)}
+					<ImSpinner2
+						size={24}
+						className={cn(
+							isLoadingTimestamp ? "" : "hidden",
+							"animate-spin text-black"
+						)}
+					/>
+					<button
+						className={cn(
+							!clipboard.copied && !isLoadingTimestamp ? "" : "hidden",
+							"h-[100%] text-black flex items-center justify-center gap-1 px-4 py-2 rounded-xl hover:text-white hover:bg-black"
+						)}
+						onClick={() => clipboard.copy(timestampInfo)}
+					>
+						<BsClipboard2 size={18} />
+						Copy
+					</button>
+					<button
+						className={cn(
+							clipboard.copied && !isLoadingTimestamp ? "" : "hidden",
+							"h-[100%] text-black flex items-center justify-center gap-1 p-2"
+						)}
+					>
+						<BsClipboard2Check size={18} />
+						Copied!
+					</button>
 				</div>
 				<TypographyP className="whitespace-pre-wrap">
-					{timestampInfo}
+					{timestampString}
 				</TypographyP>
 			</div>
 

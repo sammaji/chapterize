@@ -3,7 +3,7 @@ export async function getTranscripts(vid: string) {
     try {
         const response = await fetch(`${api_url}/${vid}`)        
         const data = await response.json();
-        return data;
+        return data.transcript;
     } catch(err: any) {
         console.log(err.message || err)
     }
