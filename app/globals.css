@@ -3,5 +3,25 @@
 @tailwind utilities;
 
 .smooth-shadow {
-	box-shadow: 20px 20px 60px #d7d7d7, -20px -20px 60px #ffffff;
+	/* box-shadow: 20px 20px 60px #d7d7d7, -20px -20px 60px #ffffff; */
+}
+
+.editable-text:read-write:focus {
+	min-width: 100%;
+	outline: 2px black solid;
+}
+
+.scrollable {
+	max-height: 300px;
+	overflow: auto;
+	scrollbar-width: thin;
+}
+
+.scrollable::-webkit-scrollbar {
+	width: 8px;
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+	background-color: #999999;
+	border-radius: 8px;
 }
