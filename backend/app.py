@@ -1,3 +1,5 @@
+import math
+
 import openai
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -21,9 +23,17 @@ app.add_middleware(
 )
 
 
+def second_to_timestamp(seconds: float):
+    hours = math.floor(seconds / 3600)
+    minutes = math.floor((seconds - (hours * 3600)) / 60)
+    seconds = int(seconds - (hours * 3600) - (minutes * 60))
+    return "{:02d}:{:02d}".format(minutes, seconds) if hours <= 0 else "{:d}:{:02d}:{:02d}".format(hours, minutes,
+                                                                                                   seconds)
+
+
 def parse_transcript(transcript_item):
-    start = round(transcript_item['start'], 2)
-    end = round(transcript_item['start'] + transcript_item['duration'], 2)
+    start = second_to_timestamp(round(transcript_item['start'], 2))
+    end = second_to_timestamp(round(transcript_item['start'] + transcript_item['duration'], 2))
     parsed_transcript = f"{start}-{end}={transcript_item['text']}\n"
     return {'count': len(parsed_transcript), 'content': parsed_transcript}
 

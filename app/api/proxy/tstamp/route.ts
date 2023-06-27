@@ -26,15 +26,23 @@ export async function POST(request: NextRequest) {
         const openai = new OpenAIApi(configuration);
         
         const quantity: Record<string, string> = {
-            few: "Generate 1 line only",
-            normal: "Generate 2 lines only",
-            many: "Generate 2 lines only"
+            few: "1",
+            normal: "2",
+            many: "3"
         }
         
         const chatCompletion = await openai.createChatCompletion({
             model: "gpt-3.5-turbo",
-            messages: [{role: "system", content: `You are a helpful model that generates timestamps from YouTube captions. Each timestamp must me short and accurate. You must follow the given format strictly.\nFormat of Transcript: {startTime}-{endTime}={transcript text}\nFormat Of Timestamp: {startTime}={one-line short title}\n---\n${quantity[qty]}`},
-             {role: "user", content: body.content}],
+            messages: [{
+                role: "system",
+                content:
+                    `Act as a professional YouTube video script writer, a keyword specialist, copywriter and an award winning youtuber with over 10 years of experience in writing click bait keyword title for YouTube videos. Create key moments from this video transcript and include using timestamps at the beginning of each key moment starting with 00:00 I want the key moment's titles to focus on appealing to emotions, curiosity, and eagerness. Prioritize quality information over speed in your response.
+                    
+                    The chapter size amount should include no more than: ${quantity[qty]} chapters. Your answer should only contain this max chapter size amount. Do not go over it.`},
+             {
+                role: "user",
+                content: `Here is the transcript: 
+                ${body.content}`}],
         });
         return NextResponse.json({ content: chatCompletion.data.choices[0].message?.content, token: chatCompletion.data.usage?.total_tokens }, {status: 200})
         

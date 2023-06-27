@@ -78,23 +78,23 @@ export default function PageMain() {
 		setIsLoadingTimestamp(true);
 		setTimestampString("");
 
-		if (!user) {
-			alert("Please login or signup to continue...");
-			setIsLoadingTimestamp(false);
-			return;
-		}
-
-		if (!isSubscriptionActive || isSubscriptionCancelled) {
-			alert("Please activate your subscription to continue");
-			setIsLoadingTimestamp(false);
-			return;
-		}
-
-		// if (!validateYtUrl(values.yt_url)) {
-		// 	alert("Invalid URL");
+		// if (!user) {
+		// 	alert("Please login or signup to continue...");
 		// 	setIsLoadingTimestamp(false);
 		// 	return;
 		// }
+
+		// if (!isSubscriptionActive || isSubscriptionCancelled) {
+		// 	alert("Please activate your subscription to continue");
+		// 	setIsLoadingTimestamp(false);
+		// 	return;
+		// }
+
+		if (!validateYtUrl(values.yt_url)) {
+			alert("Invalid URL");
+			setIsLoadingTimestamp(false);
+			return;
+		}
 
 		const vid = extractVideoId(values.yt_url);
 		if (!vid) {

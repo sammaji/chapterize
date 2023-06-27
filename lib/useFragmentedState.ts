@@ -25,27 +25,27 @@ export default function useFragmentedState() {
                     body: JSON.stringify({ vid, qty, content: transcript[i] })
                 })
                 const { content } = await response.json()
-                const content_array: string[] = content.trim().split("\n")
+                // const content_array: string[] = content.trim().split("\n")
     
-                // client side validation
-                // raw timestamp to time string
-                const timestamp_chunk: string = content_array.reduce((acc, value) => {
-                    if (isValidTimestamp(value)) {
-                        let parsed_timestamp = ""
-                        try {
-                            const x = value.split("=");
-                            const t_str = formatSecondsToTimeString(Number(x[0].trim()))
-                            parsed_timestamp = `${t_str} ${x[1].trim()}`
-                            return `${acc}\n${parsed_timestamp}`
-                        } catch {
-                            return acc
-                        }
-                    }
-                    return acc
-                }, "")
+                // // client side validation
+                // // raw timestamp to time string
+                // const timestamp_chunk: string = content_array.reduce((acc, value) => {
+                //     if (isValidTimestamp(value)) {
+                //         let parsed_timestamp = ""
+                //         try {
+                //             const x = value.split("=");
+                //             const t_str = formatSecondsToTimeString(Number(x[0].trim()))
+                //             parsed_timestamp = `${t_str} ${x[1].trim()}`
+                //             return `${acc}\n${parsed_timestamp}`
+                //         } catch {
+                //             return acc
+                //         }
+                //     }
+                //     return acc
+                // }, "")
     
                 // update state
-                setTimestampString((prev) => `${prev}${timestamp_chunk}`)
+                setTimestampString((prev) => `${prev}\n${content}`)
             } 
             catch (error: any) {
                 // when fetching timestamps fails

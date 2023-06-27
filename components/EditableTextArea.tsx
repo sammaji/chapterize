@@ -47,6 +47,9 @@ export default function EditableTextArea(props: EditableTextAreaProps) {
 					size={24}
 					className={cn(isLoading ? "" : "hidden", "animate-spin text-black")}
 				/>
+				<p className={cn(isLoading ? "" : "hidden", "text-sm line-clamp-1")}>
+					Generating timestamps... Check back here in a minute...
+				</p>
 				<button
 					className={cn(
 						isContentEditable && !isLoading ? "" : "hidden",
