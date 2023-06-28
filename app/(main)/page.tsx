@@ -276,7 +276,7 @@ export default function PageMain() {
 					</EditableTextArea>
 				</div>
 				<div className="mt-4 mb-24 flex items-center justify-center gap-2 bg-[#e2e8f0] px-4 rounded-xl">
-					<TypographyP className="text-sm">Powered By</TypographyP>
+					<TypographyP className="text-sm font-normal">Powered By</TypographyP>
 					<img src={IcOpenai.src} className="h-[1rem] text-sm" />
 				</div>
 			</main>
