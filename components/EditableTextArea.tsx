@@ -1,8 +1,12 @@
+"use client";
+
 import React, {
 	Dispatch,
 	FormEvent,
 	HTMLProps,
 	SetStateAction,
+	useEffect,
+	useRef,
 	useState,
 } from "react";
 import { TypographyP } from "./Typography";
@@ -16,29 +20,35 @@ import { ImSpinner2 } from "react-icons/im";
 import { useClipboard } from "@mantine/hooks";
 import { cn } from "@/lib/extra";
 import { BiCheck, BiPen } from "react-icons/bi";
+import { text } from "stream/consumers";
 
 interface EditableTextAreaProps extends HTMLProps<HTMLParagraphElement> {
 	isLoading: boolean;
 	setTimestampString: Dispatch<SetStateAction<string>>;
+	children: string;
 }
 
 export default function EditableTextArea(props: EditableTextAreaProps) {
 	const clipboard = useClipboard();
 	const { isLoading, children, setTimestampString, ...rest } = props;
 	const [isContentEditable, setIsContentEditable] = useState<boolean>(false);
+	const textRef = useRef<HTMLParagraphElement>(null!);
 
 	const handleInput = (
 		event: FormEvent<HTMLElement>,
 		setTimestampString: Dispatch<SetStateAction<string>>
 	) => {
-		event.preventDefault();
-
 		if (!isContentEditable) {
 			return;
 		}
-
 		setTimestampString(event.currentTarget.innerText);
 	};
+
+	useEffect(() => {
+		if (textRef.current) {
+			textRef.current.innerText = children;
+		}
+	}, [children]);
 
 	return (
 		<>
@@ -91,6 +101,7 @@ export default function EditableTextArea(props: EditableTextAreaProps) {
 				</button>
 			</div>
 			<TypographyP
+				ref={textRef}
 				className="scrollable editable-text whitespace-pre-wrap"
 				contentEditable={isContentEditable}
 				onInput={(event) => handleInput(event, setTimestampString)}

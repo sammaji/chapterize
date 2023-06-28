@@ -1,6 +1,7 @@
-import { HTMLAttributes } from "react";
+import { ClassAttributes, HTMLAttributes } from "react";
 
-export type TypographyProps = HTMLAttributes<HTMLElement>;
+export type TypographyProps = HTMLAttributes<HTMLElement> &
+	ClassAttributes<HTMLParagraphElement>;
 
 export function Title({ children, className, ...rest }: TypographyProps) {
 	return (

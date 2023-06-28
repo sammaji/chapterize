@@ -159,17 +159,26 @@ export default function PageMain() {
 		<div className="min-h-[100%]">
 			<Navbar />
 			<main className="mt-24 flex flex-col gap-4 items-center justify-end">
-				<div className="flex items-center justify-center gap-2 bg-[#e2e8f0] px-4 rounded-xl">
-					<TypographyP>Powered By</TypographyP>
-					<img src={IcOpenai.src} className="h-[1.25rem]" />
+				<div className="flex flex-col my-4 items-center justify-center w-[100%]">
+					{/* <TypographySmall className="text-[#8997aa]">
+					{"Try for free (No credit card required)"}
+				</TypographySmall> */}
+					{/* <div className="flex items-center justify-items-center"> */}
+					{/* <img src={IcTikTok.src} /> */}
+					<img src={IcYouTube.src} className="h-9 w-auto" />
+					{/* <img src={IcInstagram.src} /> */}
+					{/* </div> */}
 				</div>
-
 				<header className="px-[8%] pb-[2%]">
-					<Title className={cn("font-bold text-4xl text-center pb-4")}>
+					<Title
+						className={cn(
+							"text-5xl md:text-6xl font-[700] font-display text-4xl text-center pb-4"
+						)}
+					>
 						YouTube Chapters in{" "}
 						<span className="text-[#9333EA] pt-2">1 Click</span>
 					</Title>
-					<TypographyP className="text-center">
+					<TypographyP className="text-center text-xl font-light">
 						Increase Watch Time and Rank in search!
 					</TypographyP>
 				</header>
@@ -266,16 +275,9 @@ export default function PageMain() {
 						{timestampString}
 					</EditableTextArea>
 				</div>
-
-				<div className="flex flex-col items-center justify-center mt-4 mb-24 gap-8 w-[100%]">
-					{/* <TypographySmall className="text-[#8997aa]">
-					{"Try for free (No credit card required)"}
-				</TypographySmall> */}
-					{/* <div className="flex items-center justify-items-center"> */}
-						{/* <img src={IcTikTok.src} /> */}
-						<img src={IcYouTube.src} className="h-9 w-auto"/>
-						{/* <img src={IcInstagram.src} /> */}
-					{/* </div> */}
+				<div className="mt-4 mb-24 flex items-center justify-center gap-2 bg-[#e2e8f0] px-4 rounded-xl">
+					<TypographyP className="text-sm">Powered By</TypographyP>
+					<img src={IcOpenai.src} className="h-[1rem] text-sm" />
 				</div>
 			</main>
 

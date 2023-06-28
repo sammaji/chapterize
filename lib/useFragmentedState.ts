@@ -24,7 +24,7 @@ export default function useFragmentedState() {
                     method: "POST",
                     body: JSON.stringify({ vid, qty, content: transcript[i] })
                 })
-                const { content } = await response.json()
+                let { content } = await response.json()
                 // const content_array: string[] = content.trim().split("\n")
     
                 // // client side validation
@@ -45,6 +45,9 @@ export default function useFragmentedState() {
                 // }, "")
     
                 // update state
+                if (content && (typeof content === 'string') ) {
+                    content = content.trim().replace("=", " ")
+                }
                 setTimestampString((prev) => `${prev}\n${content}`)
             } 
             catch (error: any) {
