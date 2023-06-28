@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import { TypographyP, TypographySmall } from "@/components/Typography";
-import { SegmentedControl, Select, Title, createStyles } from "@mantine/core";
+import {
+	SegmentedControl,
+	Select,
+	Title,
+	createStyles,
+	rem,
+} from "@mantine/core";
 import { BiLoaderAlt } from "react-icons/bi";
 import {
 	cn,
@@ -26,15 +32,47 @@ import { generateTimestamps, getTimestamps } from "@/lib/openai";
 import useFragmentedState from "@/lib/useFragmentedState";
 import EditableTextArea from "@/components/EditableTextArea";
 
-const useStyles = createStyles(() => ({
-	dropdownItem: {
-		["&:[data-selected]"]: {
-			["&:hover"]: {
-				backgroundColor: "black",
-			},
-		},
-	},
-}));
+// const useStyles = createStyles(
+// 	(theme, { floating }: { floating: boolean }) => ({
+// 		root: {
+// 			position: "relative",
+// 		},
+
+// 		label: {
+// 			position: "absolute",
+// 			zIndex: 2,
+// 			top: rem(7),
+// 			left: theme.spacing.sm,
+// 			pointerEvents: "none",
+// 			color: floating
+// 				? theme.colorScheme === "dark"
+// 					? theme.white
+// 					: theme.black
+// 				: theme.colorScheme === "dark"
+// 				? theme.colors.dark[3]
+// 				: theme.colors.gray[5],
+// 			transition:
+// 				"transform 150ms ease, color 150ms ease, font-size 150ms ease",
+// 			transform: floating
+// 				? `translate(-${theme.spacing.sm}, ${rem(-28)})`
+// 				: "none",
+// 			fontSize: floating ? theme.fontSizes.xs : theme.fontSizes.sm,
+// 			fontWeight: floating ? 500 : 400,
+// 		},
+
+// 		required: {
+// 			transition: "opacity 150ms ease",
+// 			opacity: floating ? 1 : 0,
+// 		},
+
+// 		input: {
+// 			"&::placeholder": {
+// 				transition: "color 150ms ease",
+// 				color: !floating ? "transparent" : undefined,
+// 			},
+// 		},
+// 	})
+// );
 
 // let timerId: NodeJS.Timeout;
 // async function queuedFetch(
@@ -72,7 +110,11 @@ export default function PageMain() {
 		},
 	});
 
-	const { classes } = useStyles();
+	// const [titleDropdown, setTitleDropdown] = useState<string>("");
+	// const [dropdownFocused, setDropdownFocused] = useState<boolean>(false);
+	// const { classes } = useStyles({
+	// 	floating: titleDropdown.trim().length !== 0 || dropdownFocused,
+	// });
 
 	function handleSubmit(values: any) {
 		setIsLoadingTimestamp(true);
@@ -116,19 +158,19 @@ export default function PageMain() {
 	return (
 		<div className="min-h-[100%]">
 			<Navbar />
-			<main className="max-lg:min-h-[calc(10vh)] min-h-[calc(50vh)] mt-2 flex flex-col gap-8 items-center justify-end">
+			<main className="mt-24 flex flex-col gap-4 items-center justify-end">
 				<div className="flex items-center justify-center gap-2 bg-[#e2e8f0] px-4 rounded-xl">
 					<TypographyP>Powered By</TypographyP>
 					<img src={IcOpenai.src} className="h-[1.25rem]" />
 				</div>
 
-				<header className="px-[8%]">
-					<Title className="font-semibold text-center pb-2">
-						Make Timestamps With{" "}
-						<span className="text-[#9333EA] pt-2">One Click</span>
+				<header className="px-[8%] pb-[2%]">
+					<Title className={cn("font-bold text-4xl text-center pb-4")}>
+						YouTube Chapters in{" "}
+						<span className="text-[#9333EA] pt-2">1 Click</span>
 					</Title>
 					<TypographyP className="text-center">
-						Generate timestamps for YouTube videos
+						Increase Watch Time and Rank in search!
 					</TypographyP>
 				</header>
 
@@ -166,43 +208,76 @@ export default function PageMain() {
 						</p>
 					</button>
 				</form>
-			</main>
 
-			<div
-				className={cn(
-					!urlInputContent ? "hidden" : "",
-					"my-4 flex items-center justify-center"
-				)}
-			>
-				<div className="p-1 w-[92%] max-w-[600px] rounded-xl">
-					<Select
-						size="lg"
-						radius="12px"
-						height={"100px"}
-						allowDeselect={false}
-						required={true}
-						label={"How many timestamps do you want?"}
-						placeholder="Pick one"
-						defaultValue={"normal"}
-						classNames={{ item: classes.dropdownItem }}
-						styles={(theme) => ({
-							item: {
-								"&[data-selected]": {
-									"&, &:hover": {
-										backgroundColor: theme.colors.dark,
+				<div
+					className={cn(
+						!urlInputContent ? "hidden" : "",
+						"my-4 flex items-center justify-center"
+					)}
+				>
+					<div className="w-[100%] bg-red-100 rounded-xl">
+						<Select
+							size="lg"
+							radius="12px"
+							height={"100px"}
+							w={"600px"}
+							width={"600px"}
+							allowDeselect={true}
+							required={true}
+							// label={"How many timestamps do you want?"}
+							placeholder="How many timestamps do you want?"
+							defaultValue={undefined}
+							styles={(theme) => ({
+								item: {
+									"&[data-selected]": {
+										"&, &:hover": {
+											backgroundColor: theme.colors.dark,
+										},
 									},
 								},
-							},
-						})}
-						data={[
-							{ value: "few", label: "Few" },
-							{ value: "normal", label: "Normal" },
-							{ value: "many", label: "Many" },
-						]}
-						{...form.getInputProps("qty")}
-					/>
+							})}
+							data={[
+								{ value: "few", label: "Few" },
+								{ value: "normal", label: "Normal" },
+								{ value: "many", label: "Many" },
+							]}
+							{...form.getInputProps("qty")}
+							// classNames={classes}
+							// onChange={(event) => {
+							// 	form.getInputProps("qty").onChange(event);
+							// 	if (event) return setTitleDropdown(event);
+							// }}
+							// onFocus={() => setDropdownFocused(true)}
+							// onBlur={() => setDropdownFocused(false)}
+						/>
+					</div>
 				</div>
-			</div>
+
+				<div
+					className={cn(
+						!urlInputContent ? "hidden" : "",
+						"relative my-4 mx-auto pt-4 pb-8 px-8 grid grid-rows-[auto_1fr] gap-2 items-center justify-items-start bg-white border-[1px] border-[rgba(0,0,0,0.12)] max-w-[600px] w-[92%] rounded-xl h-fit"
+					)}
+				>
+					<EditableTextArea
+						isLoading={isLoadingTimestamp}
+						setTimestampString={setTimestampString}
+					>
+						{timestampString}
+					</EditableTextArea>
+				</div>
+
+				<div className="flex flex-col items-center justify-center mt-4 mb-24 gap-8 w-[100%]">
+					{/* <TypographySmall className="text-[#8997aa]">
+					{"Try for free (No credit card required)"}
+				</TypographySmall> */}
+					{/* <div className="flex items-center justify-items-center"> */}
+						{/* <img src={IcTikTok.src} /> */}
+						<img src={IcYouTube.src} className="h-9 w-auto"/>
+						{/* <img src={IcInstagram.src} /> */}
+					{/* </div> */}
+				</div>
+			</main>
 
 			{/* <div
 				className={cn(
@@ -227,31 +302,6 @@ export default function PageMain() {
 					/>
 				</div>
 			</div> */}
-
-			<div
-				className={cn(
-					!urlInputContent ? "hidden" : "",
-					"relative my-4 mx-auto pt-4 pb-8 px-8 grid grid-rows-[auto_1fr] gap-2 items-center justify-items-start bg-white border-[1px] border-[rgba(0,0,0,0.12)] max-w-[600px] w-[92%] rounded-xl h-fit"
-				)}
-			>
-				<EditableTextArea
-					isLoading={isLoadingTimestamp}
-					setTimestampString={setTimestampString}
-				>
-					{timestampString}
-				</EditableTextArea>
-			</div>
-
-			<div className="flex flex-col items-center justify-center mt-4 mb-24 gap-8">
-				<TypographySmall className="text-[#8997aa]">
-					{"Try for free (No credit card required)"}
-				</TypographySmall>
-				<div className="grid grid-cols-[128px_128px_128px] max-sm:grid-rows-[48px_48px_48px] max-sm:grid-cols-[128px] gap-4 items-center justify-items-center">
-					<img src={IcTikTok.src} />
-					<img src={IcYouTube.src} />
-					<img src={IcInstagram.src} />
-				</div>
-			</div>
 		</div>
 	);
 }
