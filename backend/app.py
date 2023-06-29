@@ -33,8 +33,8 @@ def second_to_timestamp(seconds: float):
 
 def parse_transcript(transcript_item):
     start = second_to_timestamp(round(transcript_item['start'], 2))
-    end = second_to_timestamp(round(transcript_item['start'] + transcript_item['duration'], 2))
-    parsed_transcript = f"{start}-{end}={transcript_item['text']}\n"
+    # end = second_to_timestamp(round(transcript_item['start'] + transcript_item['duration'], 2))
+    parsed_transcript = f"{start} {transcript_item['text']}\n"
     return {'count': len(parsed_transcript), 'content': parsed_transcript}
 
 

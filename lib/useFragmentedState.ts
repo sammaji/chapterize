@@ -7,6 +7,27 @@ function isValidTimestamp(input: string): boolean {
     return pattern.test(input);
 }
 
+// function parseTimestamp(timestamp: string) {
+//     timestamp = timestamp.replace(/([ ]+|)-([ ]+|)/, "-")
+
+//     const PATTERN_ONE = /^(\s|)(\d+:|)[0-5]\d:[0-5]\d([ ]|=)([a-zA-Z\s,;.]+)/
+//     const PATTERN_TWO_START = /^(\s|)(\d+:|)[0-5]\d:[0-5]\d/
+//     const PATTERN_TWO_END = /[ |=][a-zA-Z\s,;.]+/
+
+//     if (PATTERN_ONE.test(timestamp)) {
+//         return timestamp.trim().replace("=", " ")
+//     }
+
+//     const match_start = PATTERN_TWO_START.exec(timestamp)
+//     const match_end = PATTERN_TWO_END.exec(timestamp)
+
+//     if (match_start && match_end) {
+//         const result = `${match_start[0].trim()}${match_end[0].replace("=", " ")}`
+//         return result
+//     }
+//     return timestamp
+// }
+
 export default function useFragmentedState() {
     const [timestampString, setTimestampString] = useState<string>("")
     const [isLoadingTimestamp, setIsLoadingTimestamp] = useState<boolean>(false)
@@ -22,7 +43,7 @@ export default function useFragmentedState() {
             try {
                 const response = await fetch("/api/proxy/tstamp", {
                     method: "POST",
-                    body: JSON.stringify({ vid, qty, content: transcript[i] })
+                    body: JSON.stringify({ vid, qty, content: transcript[i], start: (i==0) })
                 })
                 let { content } = await response.json()
                 // const content_array: string[] = content.trim().split("\n")
@@ -45,10 +66,17 @@ export default function useFragmentedState() {
                 // }, "")
     
                 // update state
-                if (content && (typeof content === 'string') ) {
-                    content = content.trim().replace("=", " ")
-                }
-                setTimestampString((prev) => `${prev}\n${content}`)
+                console.log(`c -> ${content}`)
+                setTimestampString((prev) => {
+                    // if (content && (typeof content === "string")) {
+                    //     content = content.replace("=", " ")
+                    // }
+
+                    content = content.replace("=", " ")
+
+                    prev = prev.replace("=", " ")
+                    return `${prev}\n${content}`
+                })
             } 
             catch (error: any) {
                 // when fetching timestamps fails

@@ -120,11 +120,11 @@ export default function PageMain() {
 		setIsLoadingTimestamp(true);
 		setTimestampString("");
 
-		// if (!user) {
-		// 	alert("Please login or signup to continue...");
-		// 	setIsLoadingTimestamp(false);
-		// 	return;
-		// }
+		if (!user) {
+			alert("Please login or signup to continue...");
+			setIsLoadingTimestamp(false);
+			return;
+		}
 
 		// if (!isSubscriptionActive || isSubscriptionCancelled) {
 		// 	alert("Please activate your subscription to continue");
