@@ -28,20 +28,21 @@ export function extractVideoId(url: string) {
   }
 
 export function formatSecondsToTimeString(seconds: number): string {
+  try {
     const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingMinutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = Math.floor(seconds % 60);
-
-    if (Number.isNaN(hours) || Number.isNaN(minutes) || Number.isNaN(seconds)) {
-      throw new Error(`Timestamp is NaN`)
-    }
-  
-    const formattedHours = hours.toString().padStart(2, '0');
-    const formattedMinutes = minutes.toString().padStart(2, '0');
+    
+    const formattedMinutes = remainingMinutes.toString().padStart(2, '0');
     const formattedSeconds = remainingSeconds.toString().padStart(2, '0');
 
-    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+    if (hours <= 0) return `${formattedMinutes}:${formattedSeconds}`
+
+    return `${hours}:${formattedMinutes}:${formattedSeconds}`;
+  } catch {
+    return seconds.toString();
   }
+}
 
 export function parseRawTimestamp(timestamp: string[]) {
     let result: string[] = []
@@ -70,7 +71,7 @@ export function parseRawTimestamp(timestamp: string[]) {
 export function timestampArrayToString(timestamp: string[]) {
 
   if (timestamp.length === 0) return ""
-
+  
   return timestamp.reduce((acc, curr) => {
     return `${acc}\n${curr}`
   }, "")
