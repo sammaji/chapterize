@@ -1,7 +1,10 @@
 export async function getTranscripts(vid: string) {
     const api_url = process.env.NEXT_PUBLIC_TRANSCRIPT_API_URL as string;
     try {
-        const response = await fetch(`${api_url}/${vid}`)        
+        const response = await fetch(`${api_url}/${vid}`)
+        
+        if (response.status === 404) {alert("Could not find captions for this video"); return;}
+        
         const data = await response.json();
         return data.transcript;
     } catch(err: any) {
