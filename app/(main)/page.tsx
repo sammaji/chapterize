@@ -116,6 +116,29 @@ export default function PageMain() {
 	// 	floating: titleDropdown.trim().length !== 0 || dropdownFocused,
 	// });
 
+	async function cancelSubscription(subscriptionId: string) {
+		const response = await fetch(
+			`https://api.lemonsqueezy.com/v1/subscriptions/${subscriptionId}`,
+			{
+				method: "PATCH",
+				headers: {
+					Accept: "application/vnd.api+json",
+					"Content-Type": "application/vnd.api+json",
+					Authorization: `Bearer ${process.env.LEMONSQUEEZY_API_KEY}`,
+				},
+				body: JSON.stringify({
+					data: {
+						type: "subscriptions",
+						id: subscriptionId,
+						attributes: {
+							cancelled: true,
+						},
+					},
+				}),
+			}
+		);
+	}
+
 	function handleSubmit(values: any) {
 		setIsLoadingTimestamp(true);
 		setTimestampString("");

@@ -1,4 +1,7 @@
-import { isSubscriptionActive } from "@/lib/subscription";
+import {
+	isSubscriptionActive,
+	isSubscriptionCancelled,
+} from "@/lib/subscription";
 import React, {
 	ReactNode,
 	createContext,
@@ -30,6 +33,9 @@ export default function LicenseProvider({ children }: { children: ReactNode }) {
 		if (user) {
 			isSubscriptionActive(user.uid).then((result: boolean) => {
 				setSubscriptionActiveStatus(result);
+				isSubscriptionCancelled(user.uid).then((result_cancelled: boolean) => {
+					setSubscriptionCancelledStatus(result_cancelled);
+				});
 			});
 		}
 	}, [user]);

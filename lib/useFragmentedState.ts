@@ -39,6 +39,8 @@ export default function useFragmentedState() {
         // fetching transcripts
         const transcript: string[] = await getTranscripts(vid);
 
+        if (!transcript) { alert("Generating failed, please try again!"); return; }
+
         for (let i=0; i < transcript.length; i++) {
             try {
                 const response = await fetch("/api/proxy/tstamp", {
@@ -66,7 +68,7 @@ export default function useFragmentedState() {
                 // }, "")
     
                 // update state
-                console.log(`c -> ${content}`)
+                console.log(`ts -> ${content}`)
                 setTimestampString((prev) => {
                     // if (content && (typeof content === "string")) {
                     //     content = content.replace("=", " ")

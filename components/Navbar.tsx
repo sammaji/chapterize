@@ -36,7 +36,16 @@ export default function Navbar() {
 
 	return (
 		<div className="h-[56px] w-[100%] flex items-center justify-end px-8 gap-2">
-			<h2 className="text-black flex items-center justify-center gap-1">{isSubscriptionActive ? <><BiCheck />{"Pro"}</> : ""}</h2>
+			<h2 className="text-black flex items-center justify-center gap-1">
+				{isSubscriptionActive && !isSubscriptionCancelled ? (
+					<>
+						<BiCheck />
+						{"Pro"}
+					</>
+				) : (
+					""
+				)}
+			</h2>
 			{!user ? (
 				<button
 					className="bg-black text-white h-[36px] px-4 text-sm rounded-xl"

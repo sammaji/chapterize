@@ -13,3 +13,16 @@ export async function isSubscriptionActive(uid: string) {
 
     return false;
 }
+
+export async function isSubscriptionCancelled(uid: string) {
+    const licenseRef = doc(firestore, "license", uid)
+    const snapshot = await getDoc(licenseRef)
+
+    if (!snapshot.exists()) {
+        return false
+    }
+
+    const user = snapshot.data()
+    const isSubscriptionCancelled = user.isSubscriptionCancelled
+    return isSubscriptionCancelled
+}

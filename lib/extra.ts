@@ -12,8 +12,8 @@ export function validateYtUrl(url: string): boolean {
 export function extractVideoId(url: string) {
     let videoId = "";
   
-    const regex1 = /youtube\.com\/watch\?v=(\w+)/;
-    const regex2 = /youtu\.be\/(\w+)/;
+    const regex1 = /youtube\.com\/watch\?v=(.*)/;
+    const regex2 = /youtu\.be\/(.*)/;
   
     const match1 = url.match(regex1);
     const match2 = url.match(regex2);
@@ -23,6 +23,8 @@ export function extractVideoId(url: string) {
     } else if (match2 && match2[1]) {
       videoId = match2[1];
     }
+
+    if (videoId) videoId = videoId.trim()
   
     return videoId;
   }

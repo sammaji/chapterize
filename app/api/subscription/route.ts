@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import getRawBody from "raw-body";
 import { Readable } from "stream";
 import crypto from "crypto";
-import { createOrUpdateLicense, updateLicense } from "@/firebase/firestore";
+import { cancelLicense, createOrUpdateLicense, updateLicense } from "@/firebase/firestore";
 
 export async function POST(request: Request) {
     const body = await getRawBody(await Readable.from(await Buffer.from(await request.text())))
@@ -35,13 +35,20 @@ export async function POST(request: Request) {
                     subscriptionId: payload.data.id,
                     customerId: payload.data.attributes.customer_id,
                     variantId: payload.data.attributes.variant_id,
-                    currentPeriodEnd: payload.data.attributes.renews_at
+                    currentPeriodEnd: payload.data.attributes.renews_at,
+                    isCancelled: false
                 })
                 return NextResponse.json({message: "Success"}, {status: 200})
             case "subscription_updated":
                 await updateLicense(uid, {
                     variantId: payload.data.attributes.variant_id,
                     currentPeriodEnd: payload.data.attributes.renews_at 
+                })
+                return NextResponse.json({message: "Success"}, {status: 200})
+            
+            case "subscription_cancelled":
+                await cancelLicense(uid, {
+                    isCancelled: true
                 })
                 return NextResponse.json({message: "Success"}, {status: 200})
         }
