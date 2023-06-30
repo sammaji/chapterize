@@ -37,12 +37,16 @@ export async function POST(request: NextRequest) {
             model: "gpt-3.5-turbo",
             messages: [{
                 role: "system",
-                content:
-                    `You are a professional YouTube video script writer, a keyword specialist, copywriter and an award winning youtuber with over 10 years of experience in writing click bait keyword title for YouTube videos. Create key timestamps from the part of video transcript given to you. ${start_prompt} I want the timestamp titles to focus on appealing to emotions, curiosity, and eagerness. Generate only timestamps and nothing else.  I want ${quantity[qty]} timestamps only.
 
-                    Here's an example:
-                    00:00 Introduction
-                    01:29 What is Pareto's Principle?`
+                content:
+                `Generate YouTube chapter titles from the following transcripts. Create key timestamps from the part of video transcript given to you. ${start_prompt}. Generate only timestamps and nothing else. I want ${quantity[qty]} timestamps only.`
+
+                // content:
+                //     `You are a professional YouTube video script writer, a keyword specialist, copywriter and an award winning youtuber with over 10 years of experience in writing click bait keyword title for YouTube videos. Create key timestamps from the part of video transcript given to you. ${start_prompt} I want the timestamp titles to focus on appealing to emotions, curiosity, and eagerness. Generate only timestamps and nothing else.  I want ${quantity[qty]} timestamps only.
+
+                //     Here's an example:
+                //     00:00 Introduction
+                //     01:29 What is Pareto's Principle?`
             },
                 // content:
                 //     `Act as a professional YouTube video script writer, a keyword specialist, copywriter and an award winning youtuber with over 10 years of experience in writing click bait keyword title for YouTube videos. Create key moments from this video transcript and include using timestamps at the beginning of each key moment starting with 00:00 I want the key moment's titles to focus on appealing to emotions, curiosity, and eagerness. Prioritize quality information over speed in your response.
