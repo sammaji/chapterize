@@ -32,64 +32,6 @@ import { generateTimestamps, getTimestamps } from "@/lib/openai";
 import useFragmentedState from "@/lib/useFragmentedState";
 import EditableTextArea from "@/components/EditableTextArea";
 
-// const useStyles = createStyles(
-// 	(theme, { floating }: { floating: boolean }) => ({
-// 		root: {
-// 			position: "relative",
-// 		},
-
-// 		label: {
-// 			position: "absolute",
-// 			zIndex: 2,
-// 			top: rem(7),
-// 			left: theme.spacing.sm,
-// 			pointerEvents: "none",
-// 			color: floating
-// 				? theme.colorScheme === "dark"
-// 					? theme.white
-// 					: theme.black
-// 				: theme.colorScheme === "dark"
-// 				? theme.colors.dark[3]
-// 				: theme.colors.gray[5],
-// 			transition:
-// 				"transform 150ms ease, color 150ms ease, font-size 150ms ease",
-// 			transform: floating
-// 				? `translate(-${theme.spacing.sm}, ${rem(-28)})`
-// 				: "none",
-// 			fontSize: floating ? theme.fontSizes.xs : theme.fontSizes.sm,
-// 			fontWeight: floating ? 500 : 400,
-// 		},
-
-// 		required: {
-// 			transition: "opacity 150ms ease",
-// 			opacity: floating ? 1 : 0,
-// 		},
-
-// 		input: {
-// 			"&::placeholder": {
-// 				transition: "color 150ms ease",
-// 				color: !floating ? "transparent" : undefined,
-// 			},
-// 		},
-// 	})
-// );
-
-// let timerId: NodeJS.Timeout;
-// async function queuedFetch(
-// 	input: RequestInfo | URL,
-// 	init?: RequestInit,
-// 	callback?: CallableFunction,
-// 	debounceInterval = 2000
-// ): Promise<any> {
-// 	clearTimeout(timerId);
-
-// 	timerId = setTimeout(() => {
-// 		if (callback) callback();
-// 	}, debounceInterval);
-
-// 	return await fetch(input, init);
-// }
-
 export default function PageMain() {
 	const { user } = useAuth();
 	const { isSubscriptionActive, isSubscriptionCancelled } = useLicenseInfo();
@@ -109,12 +51,6 @@ export default function PageMain() {
 			qty: "normal",
 		},
 	});
-
-	// const [titleDropdown, setTitleDropdown] = useState<string>("");
-	// const [dropdownFocused, setDropdownFocused] = useState<boolean>(false);
-	// const { classes } = useStyles({
-	// 	floating: titleDropdown.trim().length !== 0 || dropdownFocused,
-	// });
 
 	async function cancelSubscription(subscriptionId: string) {
 		const response = await fetch(
@@ -247,16 +183,16 @@ export default function PageMain() {
 						"my-4 flex items-center justify-center"
 					)}
 				>
-					<div className="w-[100%] bg-red-100 rounded-xl">
+					<div className="w-[100%] rounded-xl">
 						<Select
 							size="lg"
 							radius="12px"
 							height={"100px"}
 							w={"600px"}
 							width={"600px"}
-							allowDeselect={true}
+							allowDeselect={false}
 							required={true}
-							// label={"How many timestamps do you want?"}
+							label={"How many timestamps do you want?"}
 							placeholder="How many timestamps do you want?"
 							defaultValue={undefined}
 							styles={(theme) => ({
@@ -269,11 +205,18 @@ export default function PageMain() {
 								},
 							})}
 							data={[
-								{ value: "few", label: "Few" },
-								{ value: "normal", label: "Normal" },
-								{ value: "many", label: "Many" },
+								{ value: "few", label: "Minimal", desc: "Generates around 3-5 chapters for a 10 minute video" },
+								{ value: "normal", label: "Basic", desc: "Generates around 5-10 chapters for a 10 minute video" },
+								{ value: "many", label: "Too Many", desc: "Generates around 10+ chapters for a 10 minute video" },
 							]}
+							itemComponent={({ label, desc }) => (
+								<div className="p-4">
+									<h2 className="text-xl">{label}</h2>
+									<p>{desc}</p>
+								</div>
+							)}
 							{...form.getInputProps("qty")}
+
 							// classNames={classes}
 							// onChange={(event) => {
 							// 	form.getInputProps("qty").onChange(event);
