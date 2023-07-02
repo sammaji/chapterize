@@ -1,20 +1,13 @@
-import { headers } from "next/dist/client/components/headers";
 import { NextResponse } from "next/server";
 import getRawBody from "raw-body";
 import { Readable } from "stream";
-import crypto from "crypto";
 import { cancelLicense, createOrUpdateLicense, updateLicense } from "@/firebase/firestore";
 
 export async function POST(request: Request) {
     const body = await getRawBody(await Readable.from(await Buffer.from(await request.text())))
     const payload = JSON.parse(body.toString())
-
-    const signature_string = headers().get('X-Signature')
     const signature_secret = process.env.LEMONSQUEEZY_SIGNATURE_SECRET as string
-    const hmac = crypto.createHmac("sha256", signature_secret)
-    const digest = Buffer.from(hmac.update(body).digest("hex"), "utf8")
-    const signature = Buffer.from(Array.isArray(signature_string) ? signature_string.join(""): signature_string || "", "utf8")
-
+    
     if (payload.data.attributes.product_id !== parseInt(process.env.LEMONSQUEEZY_PRODUCT_ID as string)) {
         return NextResponse.json({ message: "Invalid Product", payload: payload.data.attributes.product_id, local: process.env.LEMONSQUEEZY_PRODUCT_ID }, { status: 403 })
     }

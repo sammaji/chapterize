@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-    const vid = request.nextUrl.searchParams.get("youtube_vid")
+    const vid = request.nextUrl.searchParams.get("vid")
 
     if (!vid) {
         return NextResponse.json({message: "Invalid Video ID"}, {status: 422})
