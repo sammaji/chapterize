@@ -1,5 +1,9 @@
 import "./globals.css";
-import { Poppins } from "next/font/google";
+import { Poppins, Syne } from "next/font/google";
+
+const syne = Syne({
+	subsets: ["latin"],
+});
 
 const poppins = Poppins({
 	subsets: ["latin"],
@@ -14,7 +18,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={`${poppins.className} font-normal overflow-x-hidden overflow-y-scroll scroll-smooth bg-[#f1f5f9]`}
+				className={`${syne.className} font-normal overflow-x-hidden overflow-y-scroll scroll-smooth bg-[#f1f5f9]`}
 			>
 				{children}
 			</body>

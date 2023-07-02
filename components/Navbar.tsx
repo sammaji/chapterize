@@ -1,10 +1,12 @@
 import { useLicenseInfo } from "@/firebase/LicenseProvider";
 import { useAuth } from "../firebase/AuthProvider";
 import { BiCheck } from "react-icons/bi";
+import { FilledButton, OutlinedButton } from "./Button";
 
 export default function Navbar() {
 	const { user, authenticate, signout } = useAuth();
-	const { isSubscriptionActive, isSubscriptionCancelled } = useLicenseInfo();
+	const { isSubscriptionActive, isSubscriptionCancelled, subscriptionId } =
+		useLicenseInfo();
 
 	const handleAuth = () => {
 		authenticate();
@@ -34,41 +36,69 @@ export default function Navbar() {
 		}
 	};
 
+	async function cancelSubscription(subscriptionId: string) {
+		const response = await fetch(
+			`https://api.lemonsqueezy.com/v1/subscriptions/${subscriptionId}`,
+			{
+				method: "PATCH",
+				headers: {
+					Accept: "application/vnd.api+json",
+					"Content-Type": "application/vnd.api+json",
+					Authorization: `Bearer ${process.env.LEMONSQUEEZY_API_KEY}`,
+				},
+				body: JSON.stringify({
+					data: {
+						type: "subscriptions",
+						id: subscriptionId,
+						attributes: {
+							cancelled: true,
+						},
+					},
+				}),
+			}
+		);
+	}
+
 	return (
 		<div className="h-[56px] w-[100%] flex items-center justify-end px-8 gap-2">
 			<h2 className="text-black flex items-center justify-center gap-1">
-				{isSubscriptionActive && !isSubscriptionCancelled ? (
-					<>
-						<BiCheck />
-						{"Pro"}
-					</>
-				) : (
-					""
-				)}
-			</h2>
-			{!user ? (
-				<button
-					className="bg-black text-white h-[36px] px-4 text-sm rounded-xl"
-					onClick={handleAuth}
+				<OutlinedButton
+					hidden={isSubscriptionActive && !isSubscriptionCancelled}
+					disabled={true}
 				>
-					Login / Signup
-				</button>
-			) : (
-				<>
-					<button
-						className="text-black bg-transparent hover:bg-slate-200 h-[36px] px-4 text-sm rounded-xl"
-						onClick={handleSignOut}
-					>
-						Sign Out
-					</button>
-					<button
-						className="bg-black text-white h-[36px] px-4 text-sm rounded-xl"
-						onClick={handleSubscription}
-					>
-						Purchase
-					</button>
-				</>
-			)}
+					<BiCheck />
+					{"Pro"}
+				</OutlinedButton>
+			</h2>
+
+			<FilledButton hidden={!user} onClick={handleAuth}>
+				Login / Signup
+			</FilledButton>
+			<OutlinedButton hidden={!!user} onClick={handleSignOut}>
+				Sign Out
+			</OutlinedButton>
+			<FilledButton
+				hidden={!(!!user && (!isSubscriptionActive || isSubscriptionCancelled))}
+				onClick={handleSubscription}
+			>
+				Purchase
+			</FilledButton>
+			<FilledButton
+				hidden={!!user && (!isSubscriptionActive || isSubscriptionCancelled)}
+				onClick={() => {
+					cancelSubscription(subscriptionId)
+						.then(() => {
+							alert("Your subscription is cancelled");
+						})
+						.catch(() => {
+							alert(
+								"Some unexpected error occurred. Please try again after some time."
+							);
+						});
+				}}
+			>
+				Cancel Subscription
+			</FilledButton>
 		</div>
 	);
 }

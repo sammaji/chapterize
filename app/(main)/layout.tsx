@@ -7,10 +7,10 @@ import React, { ReactNode } from "react";
 
 export default function LayoutMain({ children }: { children: ReactNode }) {
 	return (
-		<MantineProvider withNormalizeCSS withGlobalStyles>
+		// <MantineProvider withNormalizeCSS withGlobalStyles>
 			<AuthProvider>
 				<LicenseProvider>{children}</LicenseProvider>
 			</AuthProvider>
-		</MantineProvider>
+		// </MantineProvider>
 	);
 }
