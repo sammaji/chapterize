@@ -1,3 +1,5 @@
+"use client";
+
 import { useLicenseInfo } from "@/firebase/LicenseProvider";
 import { useAuth } from "../firebase/AuthProvider";
 import { BiCheck } from "react-icons/bi";
@@ -29,7 +31,7 @@ export default function Navbar() {
 			});
 
 			const checkout_url = (await response.json()).checkout_url;
-			if (checkout_url) window.open(checkout_url);
+			if (checkout_url) window.location.href = checkout_url;
 			else throw new Error("Invalid Checkout Url");
 		} catch (err) {
 			console.error(err);
@@ -37,7 +39,7 @@ export default function Navbar() {
 	};
 
 	async function cancelSubscription(subscriptionId: string) {
-		const response = await fetch(
+		await fetch(
 			`https://api.lemonsqueezy.com/v1/subscriptions/${subscriptionId}`,
 			{
 				method: "PATCH",
@@ -71,20 +73,28 @@ export default function Navbar() {
 				</OutlinedButton>
 			</h2>
 
-			<FilledButton hidden={!user} onClick={handleAuth}>
+			<FilledButton className={user ? "hidden" : ""} onClick={handleAuth}>
 				Login / Signup
 			</FilledButton>
-			<OutlinedButton hidden={!!user} onClick={handleSignOut}>
+			<OutlinedButton className={user ? "" : "hidden"} onClick={handleSignOut}>
 				Sign Out
 			</OutlinedButton>
 			<FilledButton
-				hidden={!(!!user && (!isSubscriptionActive || isSubscriptionCancelled))}
+				className={
+					user && (!isSubscriptionActive || isSubscriptionCancelled)
+						? ""
+						: "hidden"
+				}
 				onClick={handleSubscription}
 			>
 				Purchase
 			</FilledButton>
 			<FilledButton
-				hidden={!!user && (!isSubscriptionActive || isSubscriptionCancelled)}
+				className={
+					user && !(!isSubscriptionActive || isSubscriptionCancelled)
+						? ""
+						: "hidden"
+				}
 				onClick={() => {
 					cancelSubscription(subscriptionId)
 						.then(() => {

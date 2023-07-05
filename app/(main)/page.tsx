@@ -31,6 +31,7 @@ import { useLicenseInfo } from "@/firebase/LicenseProvider";
 import { generateTimestamps, getTimestamps } from "@/lib/openai";
 import useFragmentedState from "@/lib/useFragmentedState";
 import EditableTextArea from "@/components/EditableTextArea";
+import FAQ from "@/components/FAQ";
 
 export default function PageMain() {
 	const { user } = useAuth();
@@ -96,19 +97,22 @@ export default function PageMain() {
 				</TypographySmall> */}
 					{/* <div className="flex items-center justify-items-center"> */}
 					{/* <img src={IcTikTok.src} /> */}
-					<img src={IcYouTube.src} className="h-6 w-auto" />
+					{/* <img src={IcYouTube.src} className="h-6 w-auto" /> */}
 					{/* <img src={IcInstagram.src} /> */}
 					{/* </div> */}
 				</div>
 				<header className="px-[8%] pb-[2%]">
 					<Title
-						className={cn("text-5xl md:text-6xl font-bold text-center pb-4")}
+						className={cn(
+							"text-5xl md:text-6xl font-extrabold text-center pb-4"
+						)}
 					>
 						YouTube Chapters in{" "}
 						<span className="text-[#9333EA] pt-2">One Click</span>
 					</Title>
-					<TypographyP className="text-center text-xl font-light">
-						Increase Watch Time and Rank in search!
+					<TypographyP className="text-center text-slate-700 text-lg font-normal">
+						Effortlessly generate precise YouTube Chapters and{" "}
+						<b>increase your watch time and rank in search</b>.
 					</TypographyP>
 				</header>
 
@@ -221,6 +225,8 @@ export default function PageMain() {
 					<TypographyP className="text-sm font-normal">Powered By</TypographyP>
 					<img src={IcOpenai.src} className="h-[1rem] text-sm" />
 				</div>
+
+				<FAQ />
 			</main>
 		</div>
 	);

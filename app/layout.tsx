@@ -18,7 +18,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body
-				className={`${syne.className} font-normal overflow-x-hidden overflow-y-scroll scroll-smooth bg-[#f1f5f9]`}
+				className={`font-normal overflow-x-hidden overflow-y-scroll scroll-smooth bg-[#f1f5f9]`}
 			>
 				{children}
 			</body>

@@ -1,7 +1,10 @@
-import { ClassAttributes, HTMLAttributes } from "react";
+import { type } from "os";
+import { AnchorHTMLAttributes, ClassAttributes, HTMLAttributes } from "react";
 
 export type TypographyProps = HTMLAttributes<HTMLElement> &
 	ClassAttributes<HTMLParagraphElement>;
+
+export type TypographyAnchorProps = AnchorHTMLAttributes<HTMLAnchorElement>;
 
 export function Title({ children, className, ...rest }: TypographyProps) {
 	return (
@@ -103,5 +106,16 @@ export function TypographyP({ children, className, ...rest }: TypographyProps) {
 		<p className={`leading-7 ${className}`} {...rest}>
 			{children}
 		</p>
+	);
+}
+
+export function TypographyA(props: TypographyAnchorProps) {
+	const { className, href, ...rest } = props;
+	return (
+		<a
+			href={href || "https://chapterize.vercel.app"}
+			className={`text-blue-600 hover:underline underline-offset-2 ${className}`}
+			{...rest}
+		></a>
 	);
 }
