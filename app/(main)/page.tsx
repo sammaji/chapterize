@@ -55,19 +55,18 @@ export default function PageMain() {
 			return;
 		}
 
-		console.log(isSubscriptionActive, isSubscriptionCancelled)
-
-		if (!isSubscriptionActive || isSubscriptionCancelled) {
-			alert("Please activate your subscription to continue");
-			setIsLoadingTimestamp(false);
-			return;
-		}
-
-		// if (!validateYtUrl(values.yt_url)) {
-		// 	alert("Invalid URL");
+		// console.log(isSubscriptionActive, isSubscriptionCancelled)
+		// if (!isSubscriptionActive || isSubscriptionCancelled) {
+		// 	alert("Please activate your subscription to continue");
 		// 	setIsLoadingTimestamp(false);
 		// 	return;
 		// }
+
+		if (!validateYtUrl(values.yt_url)) {
+			alert("Invalid URL");
+			setIsLoadingTimestamp(false);
+			return;
+		}
 
 		const vid = extractVideoId(values.yt_url);
 		if (!vid) {
