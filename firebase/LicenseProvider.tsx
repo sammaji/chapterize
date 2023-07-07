@@ -1,14 +1,14 @@
 import {
 	getSubscriptionId,
 	isSubscriptionActive,
-	isSubscriptionCancelled,
+	isSubscriptionCancelled
 } from "@/lib/subscription";
 import React, {
 	ReactNode,
 	createContext,
 	useContext,
 	useEffect,
-	useState,
+	useState
 } from "react";
 import { useAuth } from "./AuthProvider";
 import { useSetState } from "@mantine/hooks";
@@ -19,15 +19,11 @@ interface LicenseContextProps {
 	subscriptionId: string;
 }
 
-const LicenseContext = createContext<LicenseContextProps>({
-	isSubscriptionActive: false,
-	isSubscriptionCancelled: false,
-	subscriptionId: "",
-});
+const LicenseContext = createContext<LicenseContextProps>(null!);
 export const useLicenseInfo = () => useContext(LicenseContext);
 
 export default function LicenseProvider({ children }: { children: ReactNode }) {
-	const { user } = useAuth();
+	const { user, isUserChanged } = useAuth();
 	const [subscriptionActive, setSubscriptionActiveStatus] =
 		useState<boolean>(false);
 	const [subscriptionCancelled, setSubscriptionCancelledStatus] =
@@ -47,12 +43,12 @@ export default function LicenseProvider({ children }: { children: ReactNode }) {
 				});
 			});
 		}
-	}, [user]);
+	}, [isUserChanged]);
 
 	const subscriptionStatus: LicenseContextProps = {
 		isSubscriptionActive: subscriptionActive,
 		isSubscriptionCancelled: subscriptionCancelled,
-		subscriptionId: subscriptionId,
+		subscriptionId: subscriptionId
 	};
 
 	return (

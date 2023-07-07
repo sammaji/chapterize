@@ -3,11 +3,8 @@
 import { useState } from "react";
 import { TypographyP, TypographySmall } from "@/components/Typography";
 import {
-	SegmentedControl,
 	Select,
 	Title,
-	createStyles,
-	rem,
 } from "@mantine/core";
 import { BiLoaderAlt } from "react-icons/bi";
 import {
@@ -21,17 +18,12 @@ import { useClipboard } from "@mantine/hooks";
 import { useForm } from "@mantine/form";
 
 import IcOpenai from "@/assets/icons/ic_openai.svg";
-import IcTikTok from "@/assets/icons/ic_tiktok.svg";
-import IcYouTube from "@/assets/icons/ic_youtube.svg";
-import IcInstagram from "@/assets/icons/ic_instagram.svg";
 
 import { useAuth } from "@/firebase/AuthProvider";
 import Navbar from "@/components/Navbar";
 import { useLicenseInfo } from "@/firebase/LicenseProvider";
-import { generateTimestamps, getTimestamps } from "@/lib/openai";
 import useFragmentedState from "@/lib/useFragmentedState";
 import EditableTextArea from "@/components/EditableTextArea";
-import FAQ from "@/components/FAQ";
 
 export default function PageMain() {
 	const { user } = useAuth();
@@ -63,17 +55,19 @@ export default function PageMain() {
 			return;
 		}
 
+		console.log(isSubscriptionActive, isSubscriptionCancelled)
+
 		if (!isSubscriptionActive || isSubscriptionCancelled) {
 			alert("Please activate your subscription to continue");
 			setIsLoadingTimestamp(false);
 			return;
 		}
 
-		if (!validateYtUrl(values.yt_url)) {
-			alert("Invalid URL");
-			setIsLoadingTimestamp(false);
-			return;
-		}
+		// if (!validateYtUrl(values.yt_url)) {
+		// 	alert("Invalid URL");
+		// 	setIsLoadingTimestamp(false);
+		// 	return;
+		// }
 
 		const vid = extractVideoId(values.yt_url);
 		if (!vid) {
@@ -225,8 +219,6 @@ export default function PageMain() {
 					<TypographyP className="text-sm font-normal">Powered By</TypographyP>
 					<img src={IcOpenai.src} className="h-[1rem] text-sm" />
 				</div>
-
-				<FAQ />
 			</main>
 		</div>
 	);

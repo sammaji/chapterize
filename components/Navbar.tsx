@@ -4,6 +4,7 @@ import { useLicenseInfo } from "@/firebase/LicenseProvider";
 import { useAuth } from "../firebase/AuthProvider";
 import { BiCheck } from "react-icons/bi";
 import { FilledButton, OutlinedButton } from "./Button";
+import { cn } from "@/lib/extra";
 
 export default function Navbar() {
 	const { user, authenticate, signout } = useAuth();
@@ -27,7 +28,7 @@ export default function Navbar() {
 		try {
 			const response = await fetch("/api/checkout", {
 				method: "POST",
-				body: JSON.stringify({ uid: user.uid, email: user.email }),
+				body: JSON.stringify({ uid: user.uid, email: user.email })
 			});
 
 			const checkout_url = (await response.json()).checkout_url;
@@ -46,17 +47,17 @@ export default function Navbar() {
 				headers: {
 					Accept: "application/vnd.api+json",
 					"Content-Type": "application/vnd.api+json",
-					Authorization: `Bearer ${process.env.LEMONSQUEEZY_API_KEY}`,
+					Authorization: `Bearer ${process.env.LEMONSQUEEZY_API_KEY}`
 				},
 				body: JSON.stringify({
 					data: {
 						type: "subscriptions",
 						id: subscriptionId,
 						attributes: {
-							cancelled: true,
-						},
-					},
-				}),
+							cancelled: true
+						}
+					}
+				})
 			}
 		);
 	}
@@ -65,7 +66,7 @@ export default function Navbar() {
 		<div className="h-[56px] w-[100%] flex items-center justify-end px-8 gap-2">
 			<h2 className="text-black flex items-center justify-center gap-1">
 				<OutlinedButton
-					hidden={isSubscriptionActive && !isSubscriptionCancelled}
+					className={cn(user && isSubscriptionActive && !isSubscriptionCancelled ? "" : "hidden")}
 					disabled={true}
 				>
 					<BiCheck />

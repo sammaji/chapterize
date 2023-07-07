@@ -1,4 +1,4 @@
-import { firestore } from "@/firebase/init";
+import { firestore } from "@/firebase";
 import { doc, getDoc } from "firebase/firestore";
 
 export async function isSubscriptionActive(uid: string) {
@@ -7,8 +7,7 @@ export async function isSubscriptionActive(uid: string) {
 
     if (snapshot.exists()) {
         const user = snapshot.data()
-        const isSubscriptionActive = user.variantId && user.currentPeriodEnd && (Date.parse(user.currentPeriodEnd) + 86_400_00 > Date.now())
-        return isSubscriptionActive
+        return user.variantId && user.currentPeriodEnd && (Date.parse(user.currentPeriodEnd) + 86_400_00 > Date.now())
     }
 
     return false;
@@ -23,8 +22,7 @@ export async function isSubscriptionCancelled(uid: string) {
     }
 
     const user = snapshot.data()
-    const isSubscriptionCancelled = user.isSubscriptionCancelled
-    return isSubscriptionCancelled
+    return user.isSubscriptionCancelled
 }
 
 export async function getSubscriptionId(uid: string) {

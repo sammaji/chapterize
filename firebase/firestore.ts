@@ -1,5 +1,5 @@
 import { doc, setDoc } from "firebase/firestore";
-import { firestore } from "./init";
+import { firestore } from "./index";
 
 export async function createOrUpdateLicense(uid: string, data: {subscriptionId: string, customerId: string, variantId: string, currentPeriodEnd: string, isCancelled: false}) {
     const licenseRef = doc(firestore, "license", uid)
