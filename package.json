@@ -22,7 +22,7 @@
     "firebase": "^9.23.0",
     "next": "13.4.7",
     "openai": "^3.3.0",
-    "postcss": "8.4.24",
+    "postcss": "8.4.29",
     "raw-body": "^2.5.2",
     "react": "18.2.0",
     "react-animated-cursor": "^2.7.0",
