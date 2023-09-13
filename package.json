@@ -20,7 +20,7 @@
     "@mantine/hooks": "^6.0.14",
     "autoprefixer": "10.4.14",
     "firebase": "^9.23.0",
-    "next": "13.4.7",
+    "next": "13.4.19",
     "openai": "^3.3.0",
     "postcss": "8.4.29",
     "raw-body": "^2.5.2",
