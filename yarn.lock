@@ -3137,10 +3137,10 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-animated-cursor@^2.7.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/react-animated-cursor/-/react-animated-cursor-2.7.0.tgz#caf56f3ff3ce47f5fd1f4ba3622ebf7d137eb274"
-  integrity sha512-l6A0aVLBC+XmNbYWfzdkvV/OBC5h4KjpUiLUvqXNOrniGr4XSCrVA225XNBpIpwtalzOPMwj5DYUxsoKoI02Bw==
+react-animated-cursor@^2.11.1:
+  version "2.11.1"
+  resolved "https://registry.yarnpkg.com/react-animated-cursor/-/react-animated-cursor-2.11.1.tgz#db2a6c5a10a7873dd1a222259e658a444c09fdf0"
+  integrity sha512-qjXwUi2BStEEezk9VOYw5Kf7bVPVOw9lo+vHhkQmGVq4yh6c/EaFhJOuHNCxtjbNwVI5+I2e+h578Ot4nRRzbg==
 
 react-dom@18.2.0:
   version "18.2.0"
